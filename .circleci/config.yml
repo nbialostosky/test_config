@@ -1,244 +1,30 @@
-aliases:
-  # TO UPDATE THE DOCKER IMAGE: increment the tag
-  - caredox-docker-img: &caredox-docker-img
-    - image: caredox/elixir-1-9-ci:2020-04-15-13-06-56
-      auth:
-        username: $DOCKER_USER
-        password: $DOCKER_PASS
+version: 2.1
 
-  # TO REFRESH THE CACHE: increment the cache version
-  # This keys matches the most specific cache possible
-  - &deps-cache-key v9-deps-cache-{{ checksum "mix.lock" }}
-  - &plt-cache-key v9-plt-cache-{{ checksum "mix.lock" }}
-
-  # These keys are fallback caches for "partial cache restore"
-  # See https://circleci.com/docs/2.0/caching/#restoring-cache
-  - &deps-cache-base v9-deps-cache-
-
-defaults: &defaults
-  working_directory: ~/app
-  docker:
-    - <<: *caredox-docker-img
-      environment:
-        MIX_ENV: test
-        CODECOV_TOKEN: 5259775f-1c34-411b-95f5-3bc08c4e1680
-
-databases: &databases
-  working_directory: ~/app
-  docker:
-    - <<: *caredox-docker-img
-      environment:
-        MIX_ENV: test
-        CODECOV_TOKEN: 5259775f-1c34-411b-95f5-3bc08c4e1680
-    - image: circleci/mysql:5.6
-      environment:
-        MYSQL_ROOT_PASSWORD: "password1"
-        MYSQL_DATABASE: caredox_test
-        DB_HOST: 127.0.0.1
-        DB_PORT: 3306
-    - image: circleci/redis
+orbs:
+  win: circleci/windows@1.0.0
 
 jobs:
   build:
-    <<: *defaults
+    executor:
+      name: win/vs2019
+      shell: powershell.exe
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - *deps-cache-key
-            - *deps-cache-base
-      - run: mix local.hex --force
-      - run: mix local.rebar --force
-      - run: mix deps.get
-      - run: mix deps.compile
-      - run: mix compile --force --all-warnings
-      - save_cache:
-          key: *deps-cache-key
-          paths:
-            - _build
-            - deps
-            - ~/.mix
-      - persist_to_workspace:
-          root: ~/
-          paths:
-            - app
-            - .mix
-
-  test:
-    <<: *databases
-    steps:
-      - attach_workspace:
-          at: ~/
-      - run: mix local.hex --force
       - run:
-          name: Wait for DB
-          # Wait for 60 seconds for netcat (nc) to detect the DB port as open
-          command: timeout -t 60 sh -c 'until nc -z localhost 3306; do echo "waiting for DB..."; sleep 1; done'
-      - run:
-          name: Reset DB
-          command: mix ecto.reset
-      - run:
-          name: Seed DB
-          command: mix run priv/repo/seeds.exs
-      # To remove just the test cache, uncomment the next line
-      # - run: rm -rf _build/test
-      - run:
-          name: Run tests
-          command: mix coveralls.json
-      - run: bash <(curl -s https://codecov.io/bash)
-
-  credo:
-    <<: *defaults
-    steps:
-      - attach_workspace:
-          at: ~/
-      - run:
-          name: Run credo
-          command: mix credo --strict
-
-  check_formatted:
-    <<: *defaults
-    steps:
-      - attach_workspace:
-          at: ~/
-      - run:
-          name: Verify formatted
-          command: mix format --check-formatted
-
-  dialyzer:
-    <<: *defaults
-    steps:
-      - attach_workspace:
-          at: ~/
-      - restore_cache:
-          keys:
-            - *plt-cache-key
-      # To remove just the Dialyzer cache, uncomment the next line
-      # - run: rm -rf _build/dev/lib/caredox_graphql/ebin/*
-      - run: mix local.hex --force
-      - run:
-          name: Run dialyzer
-          command: MIX_ENV=dev mix dialyzer --format dialyxir --halt-exit-status
-      - save_cache:
-          key: *plt-cache-key
-          paths:
-            - _build
-  build_and_push_staging:
-    <<: *defaults
-    docker:
-      - <<: *caredox-docker-img
-        environment:
-          MIX_ENV: prod
-    steps:
-      - attach_workspace:
-          at: ~/
-      - setup_remote_docker
-      - run:
-          name: "Build & Push Docker Image"
+          name: Pull Submodules
           command: |
-            eval $(aws ecr get-login --region us-east-1 --no-include-email)
-            docker login -u $DOCKER_USER -p $DOCKER_PASS
-            docker build -t $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/roundhouse:staging -t $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/roundhouse:staging .
-            docker push $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/roundhouse:staging
-  build_and_push_image:
-    <<: *defaults
-    docker:
-      - <<: *caredox-docker-img
-        environment:
-          MIX_ENV: prod
-    steps:
-      - attach_workspace:
-          at: ~/
-      - setup_remote_docker
+            git submodule init
+            git submodule update
+
       - run:
-          name: "Build & Push Docker Image"
-          command: |
-            eval $(aws ecr get-login --region us-east-1 --no-include-email)
-            docker login -u $DOCKER_USER -p $DOCKER_PASS
-            docker build -t $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/roundhouse:${CIRCLE_BRANCH} -t $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/roundhouse:${CIRCLE_BRANCH} .
-            docker push $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/roundhouse:${CIRCLE_BRANCH}
-  deploy-to-staging:
-    <<: *defaults
-    docker:
-      - <<: *caredox-docker-img
-        environment:
-          MIX_ENV: prod
-    steps:
-      - attach_workspace:
-          at: ~/
-      - setup_remote_docker
+          name: Build App Bundle
+          command: msbuild SimpleFreeCell\SimpleFreeCell.UWP\SimpleFreeCell.UWP.csproj /p:Configuration=Release /p:AppxBundle=Always /p:AppxBundlePlatforms="x86|x64|ARM" /p:BuildAppxUploadPackageForUap=true /p:UapAppxPackageBuildMode=StoreUpload /p:PackageCertificatePassword="testpassword" -restore      
       - run:
-          name: "Deploy to ECS"
-          command: |
-            eval $(aws ecr get-login --region us-east-1 --no-include-email)
-            TASK_REVISION=`aws ecs describe-task-definition --region us-east-1 --task-definition stg_roundhouse | egrep "revision" | sed 's/[^0-9]*//g'`
-            aws ecs update-service --region us-east-1 --cluster staging --service roundhouse --task-definition stg_roundhouse:${TASK_REVISION} --force-new-deployment
-  deploy-to-dev:
-    <<: *defaults
-    docker:
-      - <<: *caredox-docker-img
-        environment:
-          MIX_ENV: prod
-    steps:
-      - attach_workspace:
-          at: ~/
-      - setup_remote_docker
-      - run:
-          name: "Deploy to ECS"
-          command: |
-            eval $(aws ecr get-login --region us-east-1 --no-include-email)
-            TASK_REVISION=`aws ecs describe-task-definition --region us-east-1 --task-definition ${CIRCLE_BRANCH}_roundhouse | egrep "revision" | sed 's/[^0-9]*//g'`
-            aws ecs update-service --region us-east-1 --cluster dev01 --service roundhouse --task-definition  ${CIRCLE_BRANCH}_roundhouse:${TASK_REVISION} --force-new-deployment
-workflows:
-  version: 2
-  continuous_integration:
-    jobs:
-      - build
-      - test:
-          requires:
-            - build
-      - check_formatted:
-          requires:
-            - build
-      - credo:
-          requires:
-            - build
-      - dialyzer:
-          requires:
-            - build
-      - build_and_push_staging:
-          requires:
-            - build
-            - test
-            - credo
-            - dialyzer
-            - check_formatted
-          filters:
-            branches:
-              only:
-                - /release-.*/
-      - build_and_push_image:
-          requires:
-            - build
-            - test
-            - credo
-            - dialyzer
-            - check_formatted
-          filters:
-            branches:
-              only:
-                - master
-                - develop
-      - deploy-to-staging:
-          requires:
-            - build_and_push_staging
-          filters:
-            branches:
-              only: /release-.*/
-      - deploy-to-dev:
-          requires:
-            - build_and_push_image
-          filters:
-            branches:
-              only:
-                - develop
+          name: Compress AppPackages
+          command: Compress-Archive -Path ./SimpleFreeCell/SimpleFreeCell.UWP/AppPackages -DestinationPath ./AppPackages.zip
+      - store_artifacts:
+          path: ./AppPackages.zip
+          resource_class: windows.medium
+          shell: powershell.exe -ExecutionPolicy Bypass
+      
+      
