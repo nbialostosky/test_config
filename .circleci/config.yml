@@ -7,7 +7,7 @@ jobs:
       - slack/notify:
           color: '#42e2f4'
           message: 'Hello from CircleCI to Slack :)'
-          webhook: https://hooks.slack.com/services/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
+          webhook: 'T02519B3Z/B011ZSJHZSA/5cqYrZL3RovWfGpL5yai6kdC'
 orbs:
   slack: circleci/slack@3.4.2
 version: 2.1
