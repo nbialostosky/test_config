@@ -1,30 +1,40 @@
-version: 2.1
-
-orbs:
-  win: circleci/windows@1.0.0
-
+version: 2
 jobs:
   build:
-    executor:
-      name: win/vs2019
-      shell: powershell.exe
+    docker:
+    - image: circleci/android:api-25-alpha
+    working_directory: ~/project
     steps:
-      - checkout
-      - run:
-          name: Pull Submodules
-          command: |
-            git submodule init
-            git submodule update
-
-      - run:
-          name: Build App Bundle
-          command: msbuild SimpleFreeCell\SimpleFreeCell.UWP\SimpleFreeCell.UWP.csproj /p:Configuration=Release /p:AppxBundle=Always /p:AppxBundlePlatforms="x86|x64|ARM" /p:BuildAppxUploadPackageForUap=true /p:UapAppxPackageBuildMode=StoreUpload /p:PackageCertificatePassword="testpassword" -restore      
-      - run:
-          name: Compress AppPackages
-          command: Compress-Archive -Path ./SimpleFreeCell/SimpleFreeCell.UWP/AppPackages -DestinationPath ./AppPackages.zip
-      - store_artifacts:
-          path: ./AppPackages.zip
-          resource_class: windows.medium
-          shell: powershell.exe -ExecutionPolicy Bypass
+    - checkout
+    - restore_cache:
+        key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+    - run:
+        name: Chmod permissions
+        command: sudo chmod +x ./gradlew
+    - run:
+        name: Download Dependencies
+        command: git config core.autocrlf false
+        command: ./gradlew androidDependencies
+    - run:
+        name: Run Tests
+        command: ./gradlew assembleJoyride
+    - store_artifacts:
+        path: app/build/outputs/apk/release/
+        destination: release
+    - run:
+        name: Upload to Slack
+        command: |
+          export GIT_COMMIT_DESC=$(git log --format=oneline -n 1 | sed -E 's/^[^ ]+ (.*)$/\1/g')
+          curl -F file=@app/build/outputs/apk/release/operator.apk -F channels=autorelease -F token=$SLACK_API_TOKEN -F title=Operatorapp  https://slack.com/api/files.upload
+    - run:
+        name: Upload to Alpha
+        command: ./gradlew publishApk
+    environment:
+    - CIRCLE_COMPARE_URL: https://github.com/joyridedev/operatorapp/compare/9e42725e28bdbb7a4b5838b49c69f42217ca73f7...e80e18cad9e22c1c3c35d11dd624396b0baf34d2
+workflows:
+  version: 2
+  workflow:
+    jobs:
+    - build
       
       
