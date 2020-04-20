@@ -13,8 +13,9 @@ jobs:
         command: sudo chmod +x ./gradlew
     - run:
         name: Download Dependencies
-        command: git config core.autocrlf false
-        command: ./gradlew androidDependencies
+        command: |
+          git config core.autocrlf false
+          ./gradlew androidDependencies
     - run:
         name: Run Tests
         command: ./gradlew assembleJoyride
