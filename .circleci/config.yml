@@ -1,19 +1,57 @@
-jobs:
-  build:
-    docker:
-      - image: circleci/node
-    steps:
-      - run: echo "Hello World" 
-      - slack/notify:
-          color: '#42e2f4'
-          message: 'Hello from CircleCI to Slack :)'
-          webhook: '${SLACK_WEBHOOK}'
-orbs:
-  slack: circleci/slack@3.4.2
-version: 2.1
-workflows:
-  your-workflow:
-    jobs:
-      - build
+# jobs:
+#   build:
+#     docker:
+#       - image: circleci/node
+#     steps:
+#       - run: echo "Hello World" 
+#       - slack/notify:
+#           color: '#42e2f4'
+#           message: 'Hello from CircleCI to Slack :)'
+#           webhook: '${SLACK_WEBHOOK}'
+# orbs:
+#   slack: circleci/slack@3.4.2
+# version: 2.1
+# workflows:
+#   your-workflow:
+#     jobs:
+#       - build
       
+      
+      
+version: 2.1
+jobs:
+  lint:
+    docker:
+      - image: 711570343235.dkr.ecr.us-west-2.amazonaws.com/terraform-awscli
+    steps:
+      - checkout
+      - run: terraform fmt --check=true --list=true
+
+  tag_calver:
+    docker:
+      - image: circleci/python:3.6.5
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "d2:1f:8b:03:5d:10:fb:4d:10:87:6c:55:83:45:67:6e"
+      - checkout
+
+      - run:
+          name: Push version tag
+          command: |
+            set -eu
+            CALVER=$(python calver.py)
+            git tag "${CALVER}"
+            git push origin "${CALVER}"
+
+
+workflows:
+  tag_workflow:
+    jobs:
+      - tag_calver:
+          context: Deploy
+          filters:
+            branches:
+              only:
+                - master
       
