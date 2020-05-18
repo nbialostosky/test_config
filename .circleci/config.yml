@@ -76,27 +76,16 @@
 #     jobs:
 #       - build
 #       - test
+
 version: 2
 jobs:
-  build:
+  test:
     docker:
       - image: circleci/node
+    parallelism: 4
+
     steps:
-      - checkout
-      - run: echo "build step "
-  test:
-    type: approval
-    docker:
-        - image: circleci/node
-    # tyoe: approval
-    steps:
-      - checkout
-      - run: echo "test step "
-workflows:
-  version: 2
-  build_and_test:
-    jobs:
-      - build
-      - test
-            type: approval
-        
+        - run: echo "hello 1"
+        - run: echo "hello 2"
+        - run: echo "hello 3"
+        - run: echo "hello 4"
