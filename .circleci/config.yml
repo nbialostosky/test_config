@@ -23,7 +23,7 @@ workflows:
         - build:
             type: approval
             
-        - step1
+        - step1:
             requires: 
             - build
        
