@@ -10,9 +10,16 @@ jobs:
       - node/with-cache:
           steps:
             - run: npm install
+  step1:
+    executor:
+      name: node/default
+    steps:
+      - echo "hello world"
+  
 workflows:
     build:
       jobs:
         - build:
             type: approval
+        - step1
        
