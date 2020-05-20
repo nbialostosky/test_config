@@ -22,5 +22,8 @@ workflows:
       jobs:
         - build:
             type: approval
+            
         - step1
+            requires: 
+            - build
        
