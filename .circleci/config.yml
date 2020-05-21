@@ -13,7 +13,7 @@ jobs:
       - run: echo "test"
 workflows:
   version: 2
-  build_and_test:
+  first_workflow:
     jobs:
       - build
       - test:
