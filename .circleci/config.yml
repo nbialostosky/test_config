@@ -43,7 +43,7 @@ workflows:
               only: master
       - pretest
       - test:
-          parallelism: 2
+          parallelism: 1
           requires:
             - build
             
