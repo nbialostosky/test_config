@@ -8,9 +8,15 @@ jobs:
   test:
     docker:
       - image: circleci/node
+    parameters:
+      parallelism:
+        type: integer
+        default: 2
+    parallelism: << parameters.parallelism >>
     steps:
       - checkout
       - run: echo "test"
+      - run : echo << parameters.parallelism >>
 workflows:
   version: 2
   first_workflow:
@@ -31,6 +37,7 @@ workflows:
               only: master
       - test:
           requires:
+          parallelism: 4
             - build
 
        
