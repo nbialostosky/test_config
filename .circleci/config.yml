@@ -6,16 +6,16 @@ jobs:
       parallelism:
         type: integer
         default: 2
-    docker:
-      -image: circleci/ruby:2.4
+      docker:
+        - image: circleci/node
     parallelism: << parameters.parallelism >>
     steps: 
       - run : echo << parameters.parallelism >>
       
       
   rails_build:
-    docker:
-      -image: circleci/ruby:2.4
+      docker:
+        - image: circleci/node
      steps: 
       - run: echo "rails build" 
     
