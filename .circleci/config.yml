@@ -10,6 +10,13 @@ jobs:
     parallelism: << parameters.parallelism >>
     steps: 
       - run : echo << parameters.parallelism >>
+      
+      
+  rails_build:
+     executor: ruby-executor
+     steps: 
+      - run: echo << parameters.parallelism >>
+    
     
 
 workflows:
