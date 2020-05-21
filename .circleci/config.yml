@@ -1,5 +1,5 @@
 version: 2.1
-...
+
 jobs:
   rails_test:
     parameters:
@@ -9,7 +9,6 @@ jobs:
     executor: ruby-executor
     parallelism: << parameters.parallelism >>
     
-    ...
 
 workflows:
   version: 2.1
