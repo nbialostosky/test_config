@@ -9,7 +9,7 @@ jobs:
     parameters:
       parallelism:
         type: integer
-        default: 2
+        default: 1
     docker:
       - image: circleci/node    
     parallelism: << parameters.parallelism >>
@@ -36,7 +36,7 @@ workflows:
             branches:
               only: master
       - test:
-          parallelism: 4
+          parallelism: 2
           requires:
             - build
             
