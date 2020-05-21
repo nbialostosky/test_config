@@ -56,7 +56,7 @@ jobs:
       p:
         type: integer
         default: 1
-    parallelism: << parameters.parallelism >>
+    parallelism: << parameters.p >>
     machine: true
     steps:
       - checkout
@@ -64,7 +64,7 @@ workflows:
   workflow:
     jobs:
       - build:
-          parallelism: 2
+          p: 2
 
 
        
