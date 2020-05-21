@@ -5,6 +5,12 @@ jobs:
     steps:
       - checkout
       - run: echo "build"
+  pretest:
+    docker:
+      - image: circleci/node
+    steps:
+      - checkout
+      - run: echo "pretest"
   test:
     parameters:
       parallelism:
@@ -35,6 +41,7 @@ workflows:
           filters:
             branches:
               only: master
+      - pretest
       - test:
           parallelism: 2
           requires:
