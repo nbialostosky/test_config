@@ -34,13 +34,13 @@ workflows:
             branches:
               ignore:
                 - master
-      - test:
-          filters:
-            branches:
-              ignore:
-                - master
-          requires:
-            - build
+#       - test:
+#           filters:
+#             branches:
+#               ignore:
+#                 - master
+#           requires:
+#             - build
   second_workflow:
     jobs:
       - build:
