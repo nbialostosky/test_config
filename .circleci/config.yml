@@ -35,6 +35,10 @@ workflows:
               ignore:
                 - master
       - test:
+          filters:
+            branches:
+              ignore:
+                - master
           requires:
             - build
   second_workflow:
@@ -45,7 +49,7 @@ workflows:
               only: master
       - pretest
       - test:
-          p: 1
+          p: 3
           requires:
             - build
             
