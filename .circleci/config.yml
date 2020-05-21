@@ -36,8 +36,8 @@ workflows:
             branches:
               only: master
       - test:
-          requires:
           parallelism: 4
+          requires:
             - build
 
        
