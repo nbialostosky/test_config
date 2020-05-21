@@ -15,7 +15,7 @@ jobs:
   rails_build:
      executor: ruby-executor
      steps: 
-      - run: echo << parameters.parallelism >>
+      - run: echo "rails build" 
     
     
 
