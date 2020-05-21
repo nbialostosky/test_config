@@ -1,22 +1,25 @@
 version: 2.1
 
+executors: # a reusable executor
+  ruby-executor:
+    docker:
+      - image: circleci/ruby
+
 jobs:
   rails_test:
-    docker:
-        - image: circleci/node
     parameters:
       parallelism:
         type: integer
         default: 2
-      
+        
+    executor: ruby-executor  
     parallelism: << parameters.parallelism >>
     steps: 
       - run : echo << parameters.parallelism >>
       
       
   rails_build:
-    docker:
-        - image: circleci/node
+     executor: ruby-executor
      steps: 
       - run: echo "rails build" 
     
