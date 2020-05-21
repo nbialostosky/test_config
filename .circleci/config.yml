@@ -22,6 +22,9 @@ workflows:
   second_workflow:
     jobs:
       - build
+          filters:
+            branches:
+              only: master
       - test:
           requires:
             - build
