@@ -46,9 +46,15 @@ workflows:
       - build:
           filters:
             branches:
-              only: master
+              only:
+                - master
       - pretest
       - test:
+          filters:
+            branches:
+              only:
+                - master
+          
           p: 3
           requires:
             - build
