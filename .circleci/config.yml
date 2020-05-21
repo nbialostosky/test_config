@@ -43,7 +43,7 @@ workflows:
               only: master
       - pretest
       - test:
-          p: 3
+          p: 1
           requires:
             - build
             
