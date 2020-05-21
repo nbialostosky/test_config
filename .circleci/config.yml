@@ -6,14 +6,16 @@ jobs:
       parallelism:
         type: integer
         default: 2
-    executor: ruby-executor
+    docker:
+      -image: circleci/ruby:2.4
     parallelism: << parameters.parallelism >>
     steps: 
       - run : echo << parameters.parallelism >>
       
       
   rails_build:
-     executor: ruby-executor
+    docker:
+      -image: circleci/ruby:2.4
      steps: 
       - run: echo "rails build" 
     
