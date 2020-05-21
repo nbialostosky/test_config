@@ -32,15 +32,15 @@ workflows:
       - build:
           filters:
             branches:
-              ignore:
-                - master
-#       - test:
-#           filters:
-#             branches:
-#               ignore:
-#                 - master
-#           requires:
-#             - build
+              only:
+                - develop
+      - test:
+          filters:
+            branches:
+              only:
+                - develop
+          requires:
+            - build
   second_workflow:
     jobs:
       - build:
