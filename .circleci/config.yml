@@ -15,7 +15,11 @@ workflows:
   version: 2
   first_workflow:
     jobs:
-      - build
+      - build:
+          filters:
+            branches:
+              ignore:
+                - master
       - test:
           requires:
             - build
