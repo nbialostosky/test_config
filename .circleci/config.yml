@@ -6,7 +6,6 @@ jobs:
       - checkout
       - run: echo "build"
   test:
-
     parameters:
       parallelism:
         type: integer
