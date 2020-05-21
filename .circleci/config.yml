@@ -1,29 +1,37 @@
 version: 2.1
-orbs:
-  node: circleci/node@1.1.6
+...
 jobs:
-  build:
-    executor:
-      name: node/default
-    steps:
-      - checkout
-      - node/with-cache:
-          steps:
-            - run: npm install
-  step1:
-    executor:
-      name: node/default
-    steps:
-      - checkout
-      - run: echo "hello world"
-  
+  rails_test:
+    parameters:
+      parallelism:
+        type: integer
+        default: 2
+    executor: ruby-executor
+    # parallelism: << parameters.parallelism >>
+        when: 
+    ...
+
 workflows:
-    build:
-      jobs:
-        - build:
-            type: approval
-            
-        - step1:
-            requires: 
-            - build
+  version: 2.1
+  develop_workflow:
+    jobs:
+      - rails_build:
+          filters:
+            branches:
+              ignore:
+                - master
+      - rails_test:
+          requires:
+            - rails_build
+  production_workflow:
+    jobs:
+      - rails_build:
+          filters:
+            branches:
+              only: master
+      - rails_test:
+          parallelism: 4
+          requires:
+            - rails_build
+
        
