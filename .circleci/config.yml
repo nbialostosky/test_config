@@ -8,7 +8,7 @@ jobs:
         default: 2
     executor: ruby-executor
     parallelism: << parameters.parallelism >>
-        when: 
+    
     ...
 
 workflows:
