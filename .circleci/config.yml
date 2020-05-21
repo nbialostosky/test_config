@@ -2,19 +2,20 @@ version: 2.1
 
 jobs:
   rails_test:
+    docker:
+        - image: circleci/node
     parameters:
       parallelism:
         type: integer
         default: 2
-      docker:
-        - image: circleci/node
+      
     parallelism: << parameters.parallelism >>
     steps: 
       - run : echo << parameters.parallelism >>
       
       
   rails_build:
-      docker:
+    docker:
         - image: circleci/node
      steps: 
       - run: echo "rails build" 
