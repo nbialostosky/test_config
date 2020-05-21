@@ -7,7 +7,7 @@ jobs:
         type: integer
         default: 2
     executor: ruby-executor
-    # parallelism: << parameters.parallelism >>
+    parallelism: << parameters.parallelism >>
         when: 
     ...
 
