@@ -7,15 +7,16 @@ executors: # a reusable executor
 
 jobs:
   rails_test:
-    parameters:
-      parallelism:
-        type: integer
-        default: 2
+#     parameters:
+#       parallelism:
+#         type: integer
+#         default: 2
         
     executor: ruby-executor  
-    parallelism: << parameters.parallelism >>
+#     parallelism: << parameters.parallelism >>
     steps: 
-      - run : echo << parameters.parallelism >>
+#       - run : echo << parameters.parallelism >>
+      - run : echo "rails_test" 
       
       
   rails_build:
@@ -30,21 +31,21 @@ workflows:
   develop_workflow:
     jobs:
       - rails_build:
-          filters:
-            branches:
-              ignore:
-                - master
+#           filters:
+#             branches:
+#               ignore:
+#                 - master
       - rails_test:
           requires:
             - rails_build
   production_workflow:
     jobs:
       - rails_build:
-          filters:
-            branches:
-              only: master
+#           filters:
+#             branches:
+#               only: master
       - rails_test:
-          parallelism: 4
+#           parallelism: 4
           requires:
             - rails_build
 
