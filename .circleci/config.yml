@@ -10,7 +10,7 @@ jobs:
       - image: circleci/node
     parameters:
       parallelism:
-        type: integer
+        type: Number
         default: 2
     parallelism: << parameters.parallelism >>
     steps:
