@@ -8,9 +8,9 @@ executors: # a reusable executor
 jobs:
   rails_test:
     executor: ruby-executor
-      steps: 
+    steps: 
 #       - run : echo << parameters.parallelism >>
-        - run : echo "rails_test" 
+      - run : echo "rails_test" 
 #     parameters:
 #       parallelism:
 #         type: integer
@@ -25,9 +25,9 @@ jobs:
       
   rails_build:
     executor: ruby-executor
-      steps: 
+    steps: 
 #       - run : echo << parameters.parallelism >>
-        - run : echo "rails_build" 
+      - run : echo "rails_build" 
     
     
 
