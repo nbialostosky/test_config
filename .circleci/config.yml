@@ -1,70 +1,70 @@
-jobs:
-  build:
-    docker:
-      - image: circleci/node
-    steps:
-      - checkout
-      - run: echo "build"
-  pretest:
-    docker:
-      - image: circleci/node
-    steps:
-      - checkout
-      - run: echo "pretest"
-  test:
-    parameters:
-      parallelism:
-        type: integer
-        default: 1
-    docker:
-      - image: circleci/node    
-    parallelism: << parameters.parallelism >>
-    steps:
-      - checkout
-      - run: echo "test"
-#       - run : echo << parameters.parallelism >>
-workflows:
-  version: 2
-  first_workflow:
-    jobs:
-      - build:
-          filters:
-            branches:
-              ignore:
-                - master
-      - test:
-          requires:
-            - build
-  second_workflow:
-    jobs:
-      - build:
-          filters:
-            branches:
-              only: master
-      - pretest
-      - test:
-#           parallelism: 1
-          requires:
-            - build
-            
-            
-            
-# version: 2.1
 # jobs:
 #   build:
-#     parameters:
-#       p:
-#         type: integer
-#         default: 1
-#     parallelism: << parameters.p >>
-#     machine: true
+#     docker:
+#       - image: circleci/node
 #     steps:
 #       - checkout
+#       - run: echo "build"
+#   pretest:
+#     docker:
+#       - image: circleci/node
+#     steps:
+#       - checkout
+#       - run: echo "pretest"
+#   test:
+#     parameters:
+#       parallelism:
+#         type: integer
+#         default: 1
+#     docker:
+#       - image: circleci/node    
+#     parallelism: << parameters.parallelism >>
+#     steps:
+#       - checkout
+#       - run: echo "test"
+# #       - run : echo << parameters.parallelism >>
 # workflows:
-#   workflow:
+#   version: 2
+#   first_workflow:
 #     jobs:
 #       - build:
-#           p: 2
+#           filters:
+#             branches:
+#               ignore:
+#                 - master
+#       - test:
+#           requires:
+#             - build
+#   second_workflow:
+#     jobs:
+#       - build:
+#           filters:
+#             branches:
+#               only: master
+#       - pretest
+#       - test:
+# #           parallelism: 1
+#           requires:
+#             - build
+            
+            
+            
+version: 2.1
+jobs:
+  build:
+    parameters:
+      p:
+        type: integer
+        default: 1
+    parallelism: << parameters.parallelism >>
+    machine: true
+    steps:
+      - checkout
+workflows:
+  workflow:
+    jobs:
+      - build:
+          parallelism: 2
 
 
        
