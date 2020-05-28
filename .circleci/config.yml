@@ -1,17 +1,4 @@
 version: 2.1
-master: &master
-  filters:
-    branches:
-      only:
-        - master
-develop: &develop
-  filters:
-    branches:
-      only:
-        - develop
-
-
-
 
 jobs:
   build:
@@ -39,44 +26,36 @@ jobs:
       - run: echo "test"
       - run : echo << parameters.p >>
 workflows:
-#   version: 2.1
   first_workflow:
-    <<: *develop
     jobs:
       - build:
-#           filters:
-#             branches:
-#               only:
-#                 - develop
+          filters:
+            branches:
+              only:
+                - develop
       - test:
-#           filters:
-#             branches:
-#               only:
-#                 - develop
+          filters:
+            branches:
+              only:
+                - develop
           requires:
             - build
   second_workflow:
-    <<: *master
     jobs:
       - build:
-#           filters:
-#             branches:
-#               only:
-#                 - master
+          filters:
+            branches:
+              only:
+                - master
       - pretest
       - test:
-#           filters:
-#             branches:
-#               only:
-#                 - master
+          name: test
+          filters:
+            branches:
+              only:
+                - master
           
           p: 3
           requires:
             - build
-            
-            
-            
-            #testing 
-            
-            
        
