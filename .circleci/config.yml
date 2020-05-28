@@ -49,7 +49,7 @@ workflows:
                 - master
       - pretest
       - test:
-          name: test
+          name: different_name
           filters:
             branches:
               only:
