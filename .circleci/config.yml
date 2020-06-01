@@ -52,8 +52,8 @@ workflows:
                 - master
       - pretest
       - test:
-          requires:
-            - queue/block_workflow
+#           requires:
+#             - queue/block_workflow
           filters:
             branches:
               only:
