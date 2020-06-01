@@ -49,7 +49,6 @@ workflows:
                 - master
       - pretest
       - test:
-          name: different_name
           filters:
             branches:
               only:
