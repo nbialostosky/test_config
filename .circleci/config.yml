@@ -1,4 +1,6 @@
 version: 2.1
+orbs:
+  queue: eddiewebb/queue@1.5.0
 
 jobs:
   build:
@@ -28,6 +30,7 @@ jobs:
 workflows:
   first_workflow:
     jobs:
+      - queue/block_workflow:
       - build:
           filters:
             branches:
@@ -49,6 +52,8 @@ workflows:
                 - master
       - pretest
       - test:
+          requires:
+            - queue/block_workflow
           filters:
             branches:
               only:
