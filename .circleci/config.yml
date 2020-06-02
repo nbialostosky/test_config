@@ -69,8 +69,8 @@ workflows:
           requires:
             - build
   second_workflow:
-    when:
-      equal: [ report, << pipeline.parameters.action >> ]
+#     when:
+#       equal: [ report, << pipeline.parameters.action >> ]
     jobs:
       - build:
           filters:
