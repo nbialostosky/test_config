@@ -13,10 +13,10 @@ jobs:
     steps:
       - checkout
       - run: echo "pretest"
-      - run: 
-          command: |
-            test:
-              p: 4
+#       - run: 
+#           command: |
+#             test:
+#               p: 4
   test:
     parameters:
       p:
@@ -61,6 +61,8 @@ workflows:
               only:
                 - master
       - pretest
-      - test:          
+      - test:
+          p:
+            4
           requires:
             - build
