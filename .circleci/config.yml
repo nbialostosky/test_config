@@ -1,6 +1,4 @@
 version: 2.1
-orbs:
-  queue: eddiewebb/queue@1.5.0
 
 jobs:
   build:
@@ -24,16 +22,13 @@ jobs:
       - image: circleci/node    
     parallelism: << parameters.p >>
     steps:
-      - queue/until_front_of_line:
-          only-on-branch: master
-          time: '10'
       - checkout
       - run: echo "test"
       - run : echo << parameters.p >>
+      - run: echo " the nameof this branch is : << pipeline.git.branch >>"
 workflows:
   first_workflow:
     jobs:
-#       - queue/block_workflow:
       - build:
           filters:
             branches:
@@ -55,8 +50,7 @@ workflows:
                 - master
       - pretest
       - test:
-#           requires:
-#             - queue/block_workflow
+          name: different_name
           filters:
             branches:
               only:
@@ -65,4 +59,3 @@ workflows:
           p: 3
           requires:
             - build
-       
