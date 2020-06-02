@@ -31,7 +31,7 @@ jobs:
 
       
       - run: echo << pipeline.git.branch >>
-      - run:  
+#       - run:  
 #           command: |
 #             if [ << pipeline.git.branch >> = master ]; then
 #                echo << parameters.p >> = 2
