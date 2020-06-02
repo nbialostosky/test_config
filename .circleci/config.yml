@@ -1,10 +1,7 @@
 version: 2.1
 
 
-parameters:
-  p:
-    type: integer
-    default: 2
+
 
 jobs:
   build:
@@ -18,25 +15,22 @@ jobs:
       - image: circleci/node
     steps:
       - checkout
-      - run: echo "pretest"
-      - run: 
-          command: |
-           echo << pipeline.parameters.p >> = 4
-           
+      - run: echo "pretest"       
       - run: 
           command: |
             echo "export PARALLELISM=4" >> $BASH_ENV   
            
-  test:        
+  test:
+    parameters:
+      p:
+        type: integer
+        default: 2
     docker:
       - image: circleci/node    
-    parallelism: << pipeline.parameters.p >>
+    parallelism: << parameters.p >>
     steps:
       - checkout
       - run: echo "test"
-
-      - run: echo $PARALLELISM
-      - run: echo << pipeline.git.branch >>
 #       - run:  
 #           command: |
 #             if [ << pipeline.git.branch >> = master ]; then
@@ -51,7 +45,7 @@ jobs:
 #             else  
 #               echo << parameters.p >> = 4
 #             fi
-      - run : echo << pipeline.parameters.p >>      
+      - run : echo << parameters.p >>      
 workflows:
   first_workflow:
 #     when:
