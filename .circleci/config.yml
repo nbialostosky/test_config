@@ -25,6 +25,7 @@ jobs:
     steps:
       - checkout
       - run: echo "test"
+      #testing this branch
       
       - run: echo << pipeline.git.branch >>
 #       - run:  if [ << pipeline.git.branch >> = master ]; then
