@@ -48,7 +48,7 @@ jobs:
 #             fi
       - run:  
           command: |
-            if [ << pipeline.parameter.action >> = build ]; then
+            if [ << pipeline.parameters.action >> = build ]; then
                echo << parameters.p >> = 2
             else  
               echo << parameters.p >> = 4
@@ -83,7 +83,5 @@ workflows:
                 - master
       - pretest
       - test:
-          p:
-            4
           requires:
             - build
