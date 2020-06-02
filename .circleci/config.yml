@@ -69,7 +69,7 @@ workflows:
                 - master
       - pretest
       - test:
-          parameters.p: 4
+          p: 4
           requires:
             - build
             
