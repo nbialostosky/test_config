@@ -25,7 +25,7 @@ jobs:
       - checkout
       - run: echo "test"
       - run : echo << parameters.p >>
-      - run: echo " the nameof this branch is : << pipeline.git.branch >>"
+      - run: echo << pipeline.git.branch >>
 workflows:
   first_workflow:
     jobs:
