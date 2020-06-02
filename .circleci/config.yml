@@ -53,10 +53,6 @@ jobs:
             else  
               echo << parameters.p >> = 4
             fi
-
-
-
-
       - run : echo << parameters.p >>      
 workflows:
   first_workflow:
@@ -74,7 +70,7 @@ workflows:
             - build
   second_workflow:
     when:
-      equal: [ build, << pipeline.parameters.action >> ]
+      equal: [ report, << pipeline.parameters.action >> ]
     jobs:
       - build:
           filters:
