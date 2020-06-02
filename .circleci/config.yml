@@ -20,10 +20,9 @@ jobs:
     steps:
       - checkout
       - run: echo "pretest"
-#       - run: 
-#           command: |
-#             test:
-#               p: 4
+      - run: 
+          command: |
+           echo << parameters.p >> = 4
   test:
     parameters:
       p:
@@ -46,18 +45,18 @@ jobs:
 #             else  
 #               echo << parameters.p >> = 4
 #             fi
-      - run:  
-          command: |
-            if [ << pipeline.parameters.action >> = build ]; then
-               echo << parameters.p >> = 2
-            else  
-              echo << parameters.p >> = 4
-            fi
+#       - run:  
+#           command: |
+#             if [ << pipeline.parameters.action >> = build ]; then
+#                echo << parameters.p >> = 2
+#             else  
+#               echo << parameters.p >> = 4
+#             fi
       - run : echo << parameters.p >>      
 workflows:
   first_workflow:
-    when:
-      equal: [ build, << pipeline.parameters.action >> ]
+#     when:
+#       equal: [ build, << pipeline.parameters.action >> ]
     jobs:
       - build:
           filters:
@@ -69,8 +68,6 @@ workflows:
           requires:
             - build
   second_workflow:
-#     when:
-#       equal: [ report, << pipeline.parameters.action >> ]
     jobs:
       - build:
           filters:
