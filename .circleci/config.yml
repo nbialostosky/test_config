@@ -22,6 +22,11 @@ jobs:
       - run: 
           command: |
            echo << pipeline.parameters.p >> = 4
+           
+      - run: 
+          command: |
+           echo << pipeline.parameters>>     
+           
   test:
 #     parameters:
 #       p:
