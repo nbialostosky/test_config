@@ -25,7 +25,7 @@ jobs:
     steps:
       - checkout
       - run: echo "test"
-      - run : echo << parameters.p >>
+      
       - run: echo << pipeline.git.branch >>
 #       - run:  if [ << pipeline.git.branch >> = master ]; then
 #                echo "this is the MASTER BRANCH!!!"
@@ -33,8 +33,12 @@ jobs:
       - run:  
           command: |
             if [ << pipeline.git.branch >> = master ]; then
-               echo "this is the MASTER BRANCH!!!"
+               echo << parameters.p >> = 2
+            else  
+              echo << parameters.p >> = 4
             fi
+
+      - run : echo << parameters.p >>      
 workflows:
   first_workflow:
     jobs:
