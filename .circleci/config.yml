@@ -13,6 +13,9 @@ jobs:
     steps:
       - checkout
       - run: echo "pretest"
+      - run: 
+          command: |
+            echo << parameters.p >> = 4
   test:
     parameters:
       p:
@@ -25,19 +28,16 @@ jobs:
     steps:
       - checkout
       - run: echo "test"
-      #testing this branch
+
       
       - run: echo << pipeline.git.branch >>
-#       - run:  if [ << pipeline.git.branch >> = master ]; then
-#                echo "this is the MASTER BRANCH!!!"
-#             fi
       - run:  
-          command: |
-            if [ << pipeline.git.branch >> = master ]; then
-               echo << parameters.p >> = 2
-            else  
-              echo << parameters.p >> = 4
-            fi
+#           command: |
+#             if [ << pipeline.git.branch >> = master ]; then
+#                echo << parameters.p >> = 2
+#             else  
+#               echo << parameters.p >> = 4
+#             fi
 
       - run : echo << parameters.p >>      
 workflows:
@@ -46,13 +46,10 @@ workflows:
       - build:
           filters:
             branches:
-              only:
-                - develop
+              ignore :
+                - master
+#       - pretest        
       - test:
-          filters:
-            branches:
-              only:
-                - develop
           requires:
             - build
   second_workflow:
@@ -63,12 +60,6 @@ workflows:
               only:
                 - master
       - pretest
-      - test:
-          filters:
-            branches:
-              only:
-                - master
-          
-
+      - test:          
           requires:
             - build
