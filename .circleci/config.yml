@@ -18,7 +18,8 @@ jobs:
       - run: echo "pretest"       
       - run: 
           command: |
-            echo "export PARALLELISM=4" >> $BASH_ENV   
+            echo "export Hi=Henna" >> $BASH_ENV   
+      - run : echo ${Hi}      
            
   test:
     parameters:
