@@ -17,7 +17,8 @@ jobs:
     parameters:
       p:
         type: integer
-        default: 1
+        default: 2
+        
     docker:
       - image: circleci/node    
     parallelism: << parameters.p >>
@@ -26,6 +27,9 @@ jobs:
       - run: echo "test"
       - run : echo << parameters.p >>
       - run: echo << pipeline.git.branch >>
+      - run:  if [ << pipeline.git.branch >> = "master" ]; then
+               echo "this is the MASTER BRANCH!!!"
+            fi
 workflows:
   first_workflow:
     jobs:
@@ -50,7 +54,6 @@ workflows:
                 - master
       - pretest
       - test:
-          name: different_name
           filters:
             branches:
               only:
