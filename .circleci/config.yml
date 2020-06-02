@@ -68,6 +68,6 @@ workflows:
               only:
                 - master
           
-          p: 3
+
           requires:
             - build
