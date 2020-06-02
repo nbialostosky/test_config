@@ -25,7 +25,7 @@ jobs:
            
       - run: 
           command: |
-           echo << pipeline.parameters>>     
+            echo "export PARALLELISM=4" >> $BASH_ENV   
            
   test:
 #     parameters:
@@ -40,7 +40,7 @@ jobs:
       - checkout
       - run: echo "test"
 
-      
+      - run: echo $PARALLELISM
       - run: echo << pipeline.git.branch >>
 #       - run:  
 #           command: |
