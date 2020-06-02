@@ -1,5 +1,12 @@
 version: 2.1
 
+
+parameters:
+  action:
+    type: enum
+    enum: [build, report]
+    default: build
+
 jobs:
   build:
     docker:
@@ -13,6 +20,10 @@ jobs:
     steps:
       - checkout
       - run: echo "pretest"
+#       - run: 
+#           command: |
+#             test:
+#               p: 4
   test:
     parameters:
       p:
@@ -25,36 +36,41 @@ jobs:
     steps:
       - checkout
       - run: echo "test"
+
       
       - run: echo << pipeline.git.branch >>
-#       - run:  if [ << pipeline.git.branch >> = master ]; then
-#                echo "this is the MASTER BRANCH!!!"
+#       - run:  
+#           command: |
+#             if [ << pipeline.git.branch >> = master ]; then
+#                echo << parameters.p >> = 2
+#             else  
+#               echo << parameters.p >> = 4
 #             fi
       - run:  
           command: |
-            if [ << pipeline.git.branch >> = master ]; then
+            if [ << pipeline.parameters.action >> = build ]; then
                echo << parameters.p >> = 2
             else  
               echo << parameters.p >> = 4
             fi
-
       - run : echo << parameters.p >>      
 workflows:
   first_workflow:
+    when:
+      equal: [ build, << pipeline.parameters.action >> ]
     jobs:
       - build:
           filters:
             branches:
-              only:
-                - develop
+              ignore :
+                - master
+#       - pretest        
       - test:
-          filters:
-            branches:
-              only:
-                - develop
           requires:
             - build
   second_workflow:
+    when:
+      equal: [ build, << pipeline.parameters.action >> ]
     jobs:
       - build:
           filters:
@@ -63,11 +79,5 @@ workflows:
                 - master
       - pretest
       - test:
-          filters:
-            branches:
-              only:
-                - master
-          
-
           requires:
             - build
