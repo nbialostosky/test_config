@@ -1,5 +1,12 @@
 version: 2.1
 
+
+parameters:
+  action:
+    type: enum
+    enum: [build, report]
+    default: build
+
 jobs:
   build:
     docker:
@@ -39,10 +46,22 @@ jobs:
 #             else  
 #               echo << parameters.p >> = 4
 #             fi
+      - run:  
+          command: |
+            if [ << pipeline.parameter.action >> = build ]; then
+               echo << parameters.p >> = 2
+            else  
+              echo << parameters.p >> = 4
+            fi
+
+
+
 
       - run : echo << parameters.p >>      
 workflows:
   first_workflow:
+    when:
+      equal: [ build, << pipeline.parameters.action >> ]
     jobs:
       - build:
           filters:
@@ -54,6 +73,8 @@ workflows:
           requires:
             - build
   second_workflow:
+    when:
+      equal: [ build, << pipeline.parameters.action >> ]
     jobs:
       - build:
           filters:
