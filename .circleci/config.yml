@@ -27,12 +27,7 @@ jobs:
           command: |
             echo "export PARALLELISM=4" >> $BASH_ENV   
            
-  test:
-#     parameters:
-#       p:
-#         type: integer
-#         default: 2
-        
+  test:        
     docker:
       - image: circleci/node    
     parallelism: << pipeline.parameters.p >>
@@ -80,6 +75,7 @@ workflows:
                 - master
       - pretest
       - test:
+          parameters.p: 4
           requires:
             - build
             
