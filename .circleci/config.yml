@@ -27,7 +27,10 @@ jobs:
       - run: echo "test"
       - run : echo << parameters.p >>
       - run: echo << pipeline.git.branch >>
-      - run:  if [ << pipeline.git.branch >> = master ]; then
+#       - run:  if [ << pipeline.git.branch >> = master ]; then
+#                echo "this is the MASTER BRANCH!!!"
+#             fi
+      - run:  if [ master = master ]; then
                echo "this is the MASTER BRANCH!!!"
             fi
 workflows:
