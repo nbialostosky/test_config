@@ -2,10 +2,9 @@ version: 2.1
 
 
 parameters:
-  action:
-    type: enum
-    enum: [build, report]
-    default: build
+  p:
+    type: integer
+    default: 2
 
 jobs:
   build:
@@ -24,10 +23,10 @@ jobs:
           command: |
            echo << parameters.p >> = 4
   test:
-    parameters:
-      p:
-        type: integer
-        default: 2
+#     parameters:
+#       p:
+#         type: integer
+#         default: 2
         
     docker:
       - image: circleci/node    
