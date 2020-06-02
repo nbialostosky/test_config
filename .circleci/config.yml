@@ -21,7 +21,7 @@ jobs:
       - run: echo "pretest"
       - run: 
           command: |
-           echo << parameters.p >> = 4
+           echo << pipeline.parameters.p >> = 4
   test:
 #     parameters:
 #       p:
@@ -30,7 +30,7 @@ jobs:
         
     docker:
       - image: circleci/node    
-    parallelism: << parameters.p >>
+    parallelism: << pipeline.parameters.p >>
     steps:
       - checkout
       - run: echo "test"
@@ -51,7 +51,7 @@ jobs:
 #             else  
 #               echo << parameters.p >> = 4
 #             fi
-      - run : echo << parameters.p >>      
+      - run : echo << pipeline.parameters.p >>      
 workflows:
   first_workflow:
 #     when:
