@@ -15,7 +15,8 @@ jobs:
       - run: echo "pretest"
       - run: 
           command: |
-            echo << parameters.p >> = 4
+            test:
+              p: 4
   test:
     parameters:
       p:
