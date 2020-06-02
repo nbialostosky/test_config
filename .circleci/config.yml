@@ -70,7 +70,7 @@ workflows:
             - build
   second_workflow:
     when:
-      equal: [ build, << pipeline.parameters.action >> ]
+      equal: [ report, << pipeline.parameters.action >> ]
     jobs:
       - build:
           filters:
