@@ -1,78 +1,87 @@
-version: 2.1
+# version: 2.1
+# jobs:
+#   build:
+#     docker:
+#       - image: circleci/node
+#     steps:
+#       - checkout
+#       - run: echo "build"
+#   pretest:
+#     docker:
+#       - image: circleci/node
+#     steps:
+#       - checkout
+#       - run: echo "pretest"       
+#       - run: 
+#           command: |
+#             echo "export Hi=Henna" >> $BASH_ENV   
+#       - run : echo ${Hi}      
+           
+#   test:
+#     parameters:
+#       p:
+#         type: integer
+#         default: 2
+#     docker:
+#       - image: circleci/node    
+#     parallelism: << parameters.p >>
+#     steps:
+#       - checkout
+#       - run: echo "test"
+# #       - run:  
+# #           command: |
+# #             if [ << pipeline.git.branch >> = master ]; then
+# #                echo << parameters.p >> = 2
+# #             else  
+# #               echo << parameters.p >> = 4
+# #             fi
+# #       - run:  
+# #           command: |
+# #             if [ << pipeline.parameters.action >> = build ]; then
+# #                echo << parameters.p >> = 2
+# #             else  
+# #               echo << parameters.p >> = 4
+# #             fi
+#       - run : echo << parameters.p >>      
+# workflows:
+#   first_workflow:
+# #     when:
+# #       equal: [ build, << pipeline.parameters.action >> ]
+#     jobs:
+#       - build:
+#           filters:
+#             branches:
+#               ignore :
+#                 - master
+# #       - pretest        
+#       - test:
+#           requires:
+#             - build
+#   second_workflow:
+#     jobs:
+#       - build:
+#           filters:
+#             branches:
+#               only:
+#                 - master
+#       - pretest
+#       - test:
+#           p: 4
+#           requires:
+#             - build
 
 
-
-
+version: 2
 jobs:
   build:
     docker:
-      - image: circleci/node
+      - image: cryptonumerics/ubuntu-base:latest
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
+    working_directory: ~/protect
     steps:
       - checkout
-      - run: echo "build"
-  pretest:
-    docker:
-      - image: circleci/node
-    steps:
-      - checkout
-      - run: echo "pretest"       
-      - run: 
-          command: |
-            echo "export Hi=Henna" >> $BASH_ENV   
-      - run : echo ${Hi}      
-           
-  test:
-    parameters:
-      p:
-        type: integer
-        default: 2
-    docker:
-      - image: circleci/node    
-    parallelism: << parameters.p >>
-    steps:
-      - checkout
-      - run: echo "test"
-#       - run:  
-#           command: |
-#             if [ << pipeline.git.branch >> = master ]; then
-#                echo << parameters.p >> = 2
-#             else  
-#               echo << parameters.p >> = 4
-#             fi
-#       - run:  
-#           command: |
-#             if [ << pipeline.parameters.action >> = build ]; then
-#                echo << parameters.p >> = 2
-#             else  
-#               echo << parameters.p >> = 4
-#             fi
-      - run : echo << parameters.p >>      
-workflows:
-  first_workflow:
-#     when:
-#       equal: [ build, << pipeline.parameters.action >> ]
-    jobs:
-      - build:
-          filters:
-            branches:
-              ignore :
-                - master
-#       - pretest        
-      - test:
-          requires:
-            - build
-  second_workflow:
-    jobs:
-      - build:
-          filters:
-            branches:
-              only:
-                - master
-      - pretest
-      - test:
-          p: 4
-          requires:
-            - build
             
             
             #added a comment
