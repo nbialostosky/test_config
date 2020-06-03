@@ -75,10 +75,11 @@ version: 2
 jobs:
   build:
     docker:
-      - image: cryptonumerics/ubuntu-base:latest
-        auth:
-          username: $DOCKER_USER
-          password: $DOCKER_PASS
+      - image: circleci/node   
+#       - image: cryptonumerics/ubuntu-base:latest
+#         auth:
+#           username: $DOCKER_USER
+#           password: $DOCKER_PASS
     working_directory: ~/protect
     steps:
       - checkout
