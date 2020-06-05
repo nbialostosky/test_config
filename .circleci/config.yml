@@ -75,14 +75,15 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: circleci/node   
+      - image: circleci/node@sha256:5b0ef42c5fa04bb506c06b26c7adfe8a72140eff98f3f2e7e9c4e5fb3d3a5f84  
 #       - image: cryptonumerics/ubuntu-base:latest
 #         auth:
 #           username: $DOCKER_USER
 #           password: $DOCKER_PASS
-    working_directory: ~/protect
+#     working_directory: ~/protect
     steps:
       - checkout
+      - run : node -v
             
             
-            #added a comment
+     #newer image
