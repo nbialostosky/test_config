@@ -74,16 +74,8 @@
 version: 2.1
 jobs:
   build:
-    docker:
-      - image: circleci/php@sha256:3b0bcb744c87a87e7864ece8f8e7e62f4db97710c7104104b6c4ccc954febc46 
-#       - image: cryptonumerics/ubuntu-base:latest
-#         auth:
-#           username: $DOCKER_USER
-#           password: $DOCKER_PASS
-#     working_directory: ~/protect
+    docker: 
+      - image: circleci/node
     steps:
-      - checkout
-      - run : node -v
+      - run: echo "hello world" # ru
             
-            
-     #older image
