@@ -87,6 +87,6 @@ jobs:
            name: step 6 
            command: |
            echo "hello world 6" 
-#            sleep 2
-           echo " Bye world" 
+# #            sleep 2
+#            echo " Bye world" 
             
