@@ -83,9 +83,8 @@ jobs:
       - run: echo "hello world 3"
       - run: echo "hello world 4"
       - run: echo "hello world 5"
-      - run: 
-#            name: step 6 
-           command: |
-           echo "hello world 6" 
-
+      - run:
+          name: The First Step
+          command: |
+            echo 'Hello World!'
             
