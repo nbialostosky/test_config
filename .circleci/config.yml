@@ -75,7 +75,7 @@ version: 2.1
 jobs:
   build:
     docker: 
-      - image: circleci/node
+      - image: sensu/sensu-release:rhel7-builder
     steps:
       - run: echo "hello world" # ru
             
