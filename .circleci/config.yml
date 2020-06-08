@@ -76,7 +76,7 @@ jobs:
   build:
     docker: 
       - image: circleci/node
-      parallelism: 6
+    parallelism: 6
     steps:
       - run: echo "hello world 1" # ru
       - run: echo "hello world 2"
