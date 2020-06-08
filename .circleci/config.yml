@@ -83,5 +83,10 @@ jobs:
       - run: echo "hello world 3"
       - run: echo "hello world 4"
       - run: echo "hello world 5"
-      - run: echo "hello world 6"
+      - run: 
+           name: step 6 
+           command: |
+           echo "hello world 6" 
+           sleep 2m
+           echo " Bye world" 
             
