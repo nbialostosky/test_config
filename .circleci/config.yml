@@ -84,7 +84,7 @@ jobs:
       - run: echo "hello world 4"
       - run: echo "hello world 5"
       - run: 
-           name: step 6 
+#            name: step 6 
            command: |
            echo "hello world 6" 
 
