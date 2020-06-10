@@ -75,16 +75,11 @@ version: 2.1
 jobs:
   build:
     docker: 
-      - image: circleci/node
-    parallelism: 6
+      - image: cimg/node:10.18.0
+
     steps:
-      - run: echo "hello world 1" # ru
-      - run: echo "hello world 2"
-      - run: echo "hello world 3"
-      - run: echo "hello world 4"
-      - run: echo "hello world 5"
-      - run:
-          name: The First Step
-          command: |
-            sleep 5m
+      - run: git config user.email henna@circleci.com
+      - run: git config user.name "henna" 
+      - run: git describe --tags --exact-match
+
             
