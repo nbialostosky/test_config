@@ -79,7 +79,7 @@ jobs:
 
     steps:
       - run: npm list -g
-      - run: npm i
+      - run: node -v
       - run: npm list -g
       
 #       - run: git config --global user.email henna@circleci.com
