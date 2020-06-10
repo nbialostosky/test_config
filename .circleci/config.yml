@@ -78,6 +78,7 @@ jobs:
       - image: cimg/node:10.18.0
 
     steps:
+      - run: git config --list
       - run: git config --global user.email henna@circleci.com
       - run: git config --global user.name "henna" 
       - run: git describe --tags --exact-match
