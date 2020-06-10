@@ -79,6 +79,9 @@ jobs:
 
     steps:
       - run: npm list -g
+      - run: npm i
+      - run: npm list -g
+      
 #       - run: git config --global user.email henna@circleci.com
 #       - run: git config --global user.name "henna" 
 #       - run: git describe --tags --exact-match
