@@ -80,7 +80,7 @@ jobs:
     steps:
       - run : echo "$CIRCLE_TAG"
       - checkout 
-      - run : echo "testing git tags"
+      - run : echo "second test to see which tag circle is fetching"
       
 #       - run: git config --global user.email henna@circleci.com
 #       - run: git config --global user.name "henna" 
