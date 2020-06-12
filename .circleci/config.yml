@@ -82,10 +82,10 @@ jobs:
       - checkout 
       - run : echo "second test to see which tag circle is fetching"
       - run : echo 'export CIRCLE_TAG="test_tag"' >> $BASH_ENV
-      - run : echo "$CIRCLE_TAG" 
-      - checkout 
-      - run : echo "$CIRCLE_TAG" 
-      - run : echo cat test && ls
+      # - run : echo "$CIRCLE_TAG" 
+      # - checkout 
+      # - run : echo "$CIRCLE_TAG" 
+      # - run : echo cat test && ls
 #       - run: git config --global user.email henna@circleci.com
 #       - run: git config --global user.name "henna" 
 #       - run: git describe --tags --exact-match
