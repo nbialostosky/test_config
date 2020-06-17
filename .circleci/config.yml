@@ -148,6 +148,7 @@ jobs:
     machine:
       image: ubuntu-1604:201903-01
     steps:
+      - run: sudo apt-get update
       - run: sudo apt install -y openjdk-11-jdk
       - checkout
       - run:
