@@ -175,16 +175,24 @@ executors:
   my-executor:
     docker:
       - image: circleci/ruby:2.5.1-node-browsers
-#   my-other-executor:
-#     docker:
-#       - image: circleci/node      
+      
+  my-other-executor:
+    docker:
+      - image: circleci/node    
+
 jobs:
   my-job:
-    executors: 
-           - my-executor
-#            - my-other-executor
+    executor: my-executor
     steps:
       - run: echo "outside the executor"
+
+
+
+
+workflows:
+ Example_Workflow:
+   jobs:
+     - my-job
 
 
           
