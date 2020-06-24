@@ -141,16 +141,50 @@
 #       - run:
 #           name: "Run Feature Tests"
 #           command: ./vendor/bin/phpunit tests/Feature
-version: 2.1
+# version: 2.1
 
+# jobs:
+#   build:
+#     machine:
+#       image: ubuntu-1604:201903-01
+#     steps:
+#       - run: sudo apt-get update
+#       - run: sudo apt install -y openjdk-11-jdk
+#       - checkout
+#       - run:
+#           name: "Testing"
+#           command: echo "Hi"
+
+# version: 2.0
+# jobs:
+#   build:
+#     docker:
+#       - image: circleci/ruby:2.4.2-jessie-node
+#     steps:
+#       - checkout
+#       - run:
+#           name: "Update Node.js and npm"
+#           command: |
+#             curl -sSL "https://nodejs.org/dist/v11.10.0/node-v11.10.0-linux-x64.tar.xz" | sudo tar --strip-components=2 -xJ -C /usr/local/bin/ node-v11.10.0-linux-x64/bin/node
+#             curl https://www.npmjs.com/install.sh | sudo bash
+#       - run:
+#           name: Check current version of node
+#           command: node -v
+version: 2.1
+executors:
+  my-executor:
+    docker:
+      - image: circleci/ruby:2.5.1-node-browsers
+  my-other-executor:
+    docker:
+      - image: circleci/node      
 jobs:
-  build:
-    machine:
-      image: ubuntu-1604:201903-01
+  my-job:
+    executors: 
+           - my-executor
+           - my-other-executor
     steps:
-      - run: sudo apt-get update
-      - run: sudo apt install -y openjdk-11-jdk
-      - checkout
-      - run:
-          name: "Testing"
-          command: echo "Hi"
+      - run: echo outside the executor
+
+
+          
