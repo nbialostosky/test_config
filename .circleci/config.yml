@@ -182,7 +182,9 @@ executors:
 
 jobs:
   my-job:
-    executor: my-executor
+    executors: 
+           - my-executor
+           - my-other-executor
     steps:
       - run: echo "outside the executor"
 
