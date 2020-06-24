@@ -184,7 +184,7 @@ jobs:
            - my-executor
            - my-other-executor
     steps:
-      - run: echo outside the executor
+      - run: echo "outside the executor"
 
 
           
