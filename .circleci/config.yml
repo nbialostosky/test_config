@@ -170,32 +170,45 @@
 #       - run:
 #           name: Check current version of node
 #           command: node -v
-version: 2.1
-executors:
-  my-executor:
-    docker:
-      - image: circleci/ruby:2.5.1-node-browsers
-      - image: circleci/node  
+# version: 2.1
+# executors:
+#   my-executor:
+#     docker:
+#       - image: circleci/ruby:2.5.1-node-browsers
+#       - image: circleci/node  
       
-  my-other-executor:
-    docker:
-      - image: circleci/node    
+#   my-other-executor:
+#     docker:
+#       - image: circleci/node    
 
+# jobs:
+#   my-job:
+#     executor: 
+#            - my-executor
+# #            - my-other-executor
+#     steps:
+#       - run: echo "outside the executor"
+
+
+
+
+# workflows:
+#  Example_Workflow:
+#    jobs:
+#      - my-job
+
+version: 2.1
 jobs:
-  my-job:
-    executor: 
-           - my-executor
-#            - my-other-executor
+  build:
+    docker: 
+      - image: circleci/node
+      - image: circleci/ruby:2.5.1-node-browsers
+    parallelism: 6
     steps:
-      - run: echo "outside the executor"
-
-
-
-
-workflows:
- Example_Workflow:
-   jobs:
-     - my-job
-
-
+      - run: echo "hello world 1" # ru
+      - run: echo "hello world 2"
+      - run: echo "hello world 3"
+      - run: echo "hello world 4"
+      - run: echo "hello world 5"
+      - run: echo "hello world 6"
           
