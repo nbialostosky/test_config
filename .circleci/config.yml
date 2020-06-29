@@ -12,6 +12,8 @@ jobs:
       
 workflows:
   test_workflow:
+    when:
+      equal: ["latest", << pipeline.parameters.rollback >>]
     jobs:
       - build
       
