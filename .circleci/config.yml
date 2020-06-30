@@ -1,19 +1,179 @@
+# version: 2.1
+# parameters:
+#   rollback:
+#     type: string
+#     default: "latest"    
+# jobs:
+#   build:
+#     docker: 
+#       - image: circleci/node
+#     steps:
+#       - run: echo "hello world" 
+      
+# workflows:
+#   test_workflow:
+#     when:
+#       equal: ["latest", << pipeline.parameters.rollback >>]
+#     jobs:
+#       - build
+      
 version: 2.1
+
+orbs:
+  slack: circleci/slack@3.4.2
+
 parameters:
   rollback:
     type: string
-    default: "latest"    
-jobs:
-  build:
-    docker: 
-      - image: circleci/node
-    steps:
-      - run: echo "hello world" 
-      
+    default: "latest"
+  dryrun:
+    type: boolean
+    default: false
+
 workflows:
-  test_workflow:
+  workflow:
     when:
       equal: ["latest", << pipeline.parameters.rollback >>]
     jobs:
-      - build
-      
+      - test
+      - test-assets
+      - build:
+          requires:
+            - test
+            - test-assets
+          filters:
+            branches:
+              only:
+                - master
+                - /staging-.*/
+                - /sandbox-.*/
+  rollback:
+    unless:
+      equal: ["latest", << pipeline.parameters.rollback >>]
+    jobs:
+      - rollback
+
+jobs:
+  test:
+    docker:
+      - image: circleci/elixir:1.9.1
+        user: root
+      - image: redis
+      - image: mdillon/postgis
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - run:
+          name: Install Dependencies
+          command: ./ci/provision.sh
+      - restore_cache:
+          key: v1-test-{{ checksum "mix.lock" }}-{{ checksum "package-lock.json" }}-{{ checksum "assets/package-lock.json" }}
+      - run:
+          name: Run Unit Test
+          command: ./ci/test.sh
+      - save_cache:
+          key: v1-test-{{ checksum "mix.lock" }}-{{ checksum "package-lock.json" }}-{{ checksum "assets/package-lock.json" }}
+          paths:
+            - "assets/node_modules"
+            - "deps"
+            - "_build"
+      - slack/status:
+          fail_only: true
+          mentions: "here"
+          only_for_branches: "master"
+
+  test-assets:
+    docker:
+      - image: cimg/node:12.18
+        user: root
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - run:
+          name: Install `apt-get` Dependencies
+          command: |
+            apt-get update -qq && apt-get install -qq -y \
+              libgtk2.0-0 libgtk-3-0 libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb
+      - restore_cache:
+          key: v2-test-assets-{{ checksum "assets/package-lock.json" }}
+      - run:
+          name: Install `package.json` Dependencies
+          command: |
+            cd assets
+            if [[ ! -d node_modules ]]; then
+              npm ci
+            fi
+      - save_cache:
+          key: v2-test-assets-{{ checksum "assets/package-lock.json" }}
+          paths:
+            - "assets/node_modules"
+            - "/root/.cache/Cypress"
+      - run:
+          name: Build
+          command: |
+            cd assets
+            node_modules/.bin/webpack --mode production --env.COMMITID=$CIRCLE_SHA1 --config ./webpack.config.fwn.js
+            node_modules/.bin/webpack --mode production --env.COMMITID=$CIRCLE_SHA1 --config ./webpack.config.pwa.js
+            node_modules/.bin/webpack --mode production --env.COMMITID=$CIRCLE_SHA1 --config ./webpack.config.tvapp.js
+      - run:
+          name: Test
+          command: |
+            cd assets
+            npm run test:ci
+
+  build:
+    docker:
+      - image: circleci/elixir:1.9.1
+        user: root
+
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - setup_remote_docker:
+          version: 17.10.0-ce
+      - run:
+          name: Install Dependencies
+          command: ./ci/provision.sh
+      - restore_cache:
+          key: v1-release-{{ checksum "mix.lock" }}-{{ checksum "package-lock.json" }}-{{ checksum "assets/package-lock.json" }}
+      - deploy:
+          name: Deployment
+          command: ./ci/deploy.sh
+      - save_cache:
+          key: v1-release-{{ checksum "mix.lock" }}-{{ checksum "package-lock.json" }}-{{ checksum "assets/package-lock.json" }}
+          paths:
+            - "assets/node_modules"
+            - "deps"
+            - "_build"
+      - slack/status:
+          fail_only: true
+          mentions: "here"
+          only_for_branches: "master"
+
+  rollback:
+    docker:
+      - image: circleci/elixir:1.9.1
+        user: root
+
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - run:
+          name: Install Dependencies
+          command: ./ci/provision.sh
+      - run:
+          name: Rollback in dry run mode
+          command: DRYRUN=true ./ci/maintenance.sh rollback << pipeline.parameters.rollback >>
+          when:
+            condition: << pipeline.parameters.dryrun >>
+      - run:
+          name: Rollback
+          command: ./ci/maintenance.sh rollback << pipeline.parameters.rollback >>
+          unless:
+            condition: << pipeline.parameters.dryrun >>
+      - slack/status:
+          mentions: "here"
