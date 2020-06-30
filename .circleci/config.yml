@@ -199,15 +199,15 @@
 #    jobs:
 #      - my-job
 
-# version: 2.1
-# jobs:
-#   build:
-#     docker: 
-#       - image: circleci/node
+version: 2.1
+jobs:
+  build:
+    docker: 
+      - image: circleci/node
 #       - image: circleci/ruby:2.5.1-node-browsers
 #     parallelism: 6
-#     steps:
-#       - run: echo "hello world 1" # ru
+    steps:
+      - run: echo "hello world 1" # ru
 #       - run: echo "hello world 2"
 #       - run: echo "hello world 3"
 #       - run: echo "hello world 4"
@@ -215,11 +215,11 @@
 #       - run: echo "hello world 6"
 
 
-version: 2.1
-orbs:
-  ruby: circleci/ruby@0.1.2
+# version: 2.1
+# orbs:
+#   ruby: circleci/ruby@0.1.2
 
-jobs:
+# jobs:
 #  build:
 #    docker:
 #      - image: circleci/ruby:2.6.3-stretch-node
@@ -231,81 +231,81 @@ jobs:
 #          command: bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=4 --retry=3
 
 
-  test:  # our next job, called "test"
-    # we run "parallel job containers" to enable speeding up our tests;
-    # this splits our tests across multiple containers.
-    parallelism: 1
-    # here we set TWO docker images.
-    docker:
-      - image: circleci/ruby:2.6.3-stretch-node
-      - image: circleci/postgres:9.5-alpine
-        environment: # add POSTGRES environment variables.
-          POSTGRES_USER: circleci-demo-ruby
-          POSTGRES_DB: rails_blog_test
-          POSTGRES_PASSWORD: "test"
-      - image: circleci/redis:4.0.9
-        environment:
-          - REDIS_URL: "redis://localhost:6379/"
-      - image: docker.elastic.co/elasticsearch/elasticsearch:6.2.2
-        environment:
-          - cluster.name: elasticsearch
-          - xpack.security.enabled: false
-          - transport.host: localhost
-          - network.host: 127.0.0.1
-          - http.port: 9200
-          - discovery.type: single-node
-    # environment variables specific to Ruby/Rails, applied to the primary container.
-    environment:
-      BUNDLE_JOBS: "3"
-      BUNDLE_RETRY: "3"
-      BUNDLE_PATH: vendor/bundle
-      PGHOST: 127.0.0.1
-      PGUSER: circleci-demo-ruby
-      PGPASSWORD: "test"
-      RAILS_ENV: test
-    # A series of steps to run, some are similar to those in "build".
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - bundle-{{ arch }}-{{ checksum "Gemfile.lock" }}
-      - run: bundle install
-      - save_cache:
-          paths:
-            - ./vendor/bundle
-          key: bundle-{{ arch }}-{{ checksum "Gemfile.lock" }}
-      - persist_to_workspace:
-          root: .
-          paths:
-            - vendor/bundle
-      - run:
-          name: copy configs
-          command: cp config/ci_database.yml.example  config/database.yml
-      - run:
-          name: Wait for DB
-          command: dockerize -wait tcp://localhost:5432 -timeout 1m
-      - run:
-          name: Wait for Redis
-          command: dockerize -wait tcp://localhost:6379 -timeout 1m
-      - run:
-          name: Database create
-          command: bundle exec rails db:create
-      - run:
-          name: Database setup
-          command: bundle exec rails db:schema:load --trace
-#      - run:
-#          name: prepare tests
-#          command: bundle exec rails db:test:prepare
-      - run:
-          name: copy ENV
-          command: cp config/ci_application.yml  config/application.yml
-      - run:
-          name: run tests
-          command: bundle exec rspec spec/*
+#   test:  # our next job, called "test"
+#     # we run "parallel job containers" to enable speeding up our tests;
+#     # this splits our tests across multiple containers.
+#     parallelism: 1
+#     # here we set TWO docker images.
+#     docker:
+#       - image: circleci/ruby:2.6.3-stretch-node
+#       - image: circleci/postgres:9.5-alpine
+#         environment: # add POSTGRES environment variables.
+#           POSTGRES_USER: circleci-demo-ruby
+#           POSTGRES_DB: rails_blog_test
+#           POSTGRES_PASSWORD: "test"
+#       - image: circleci/redis:4.0.9
+#         environment:
+#           - REDIS_URL: "redis://localhost:6379/"
+#       - image: docker.elastic.co/elasticsearch/elasticsearch:6.2.2
+#         environment:
+#           - cluster.name: elasticsearch
+#           - xpack.security.enabled: false
+#           - transport.host: localhost
+#           - network.host: 127.0.0.1
+#           - http.port: 9200
+#           - discovery.type: single-node
+#     # environment variables specific to Ruby/Rails, applied to the primary container.
+#     environment:
+#       BUNDLE_JOBS: "3"
+#       BUNDLE_RETRY: "3"
+#       BUNDLE_PATH: vendor/bundle
+#       PGHOST: 127.0.0.1
+#       PGUSER: circleci-demo-ruby
+#       PGPASSWORD: "test"
+#       RAILS_ENV: test
+#     # A series of steps to run, some are similar to those in "build".
+#     steps:
+#       - checkout
+#       - restore_cache:
+#           keys:
+#             - bundle-{{ arch }}-{{ checksum "Gemfile.lock" }}
+#       - run: bundle install
+#       - save_cache:
+#           paths:
+#             - ./vendor/bundle
+#           key: bundle-{{ arch }}-{{ checksum "Gemfile.lock" }}
+#       - persist_to_workspace:
+#           root: .
+#           paths:
+#             - vendor/bundle
+#       - run:
+#           name: copy configs
+#           command: cp config/ci_database.yml.example  config/database.yml
+#       - run:
+#           name: Wait for DB
+#           command: dockerize -wait tcp://localhost:5432 -timeout 1m
+#       - run:
+#           name: Wait for Redis
+#           command: dockerize -wait tcp://localhost:6379 -timeout 1m
+#       - run:
+#           name: Database create
+#           command: bundle exec rails db:create
+#       - run:
+#           name: Database setup
+#           command: bundle exec rails db:schema:load --trace
+# #      - run:
+# #          name: prepare tests
+# #          command: bundle exec rails db:test:prepare
+#       - run:
+#           name: copy ENV
+#           command: cp config/ci_application.yml  config/application.yml
+#       - run:
+#           name: run tests
+#           command: bundle exec rspec spec/*
 
-workflows:
-  version: 2
-  build_and_test:
-    jobs:
-#      - build
-      - test
+# workflows:
+#   version: 2
+#   build_and_test:
+#     jobs:
+# #      - build
+#       - test
