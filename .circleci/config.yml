@@ -1,21 +1,3 @@
-# version: 2.1
-# parameters:
-#   rollback:
-#     type: string
-#     default: "latest"    
-# jobs:
-#   build:
-#     docker: 
-#       - image: circleci/node
-#     steps:
-#       - run: echo "hello world" 
-      
-# workflows:
-#   test_workflow:
-#     when:
-#       equal: ["latest", << pipeline.parameters.rollback >>]
-#     jobs:
-#       - build
       
 version: 2.1
 
