@@ -1,5 +1,5 @@
 # test_config
-[![<HennaAbbas>](https://circleci.com/<github>/<HennaAbbas>/<tes_config>.svg?style=svg)](<LINK>)
 
-[![<ORG_NAME>](https://circleci.com/<VCS>/<ORG_NAME>/<PROJECT_NAME>.svg?style=svg)](<LINK>)
+  [![HennaAbbas](https://circleci.com/gh/HennaAbbas/test_config.svg?style=svg)](https://circleci.com/gh/HennaAbbas/test_config)
+
 
