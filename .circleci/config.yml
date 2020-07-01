@@ -208,11 +208,15 @@ jobs:
 #     parallelism: 6
     steps:
       - run: echo "hello world 1" # ru
-#       - run: echo "hello world 2"
-#       - run: echo "hello world 3"
-#       - run: echo "hello world 4"
-#       - run: echo "hello world 5"
-#       - run: echo "hello world 6"
+workflows:
+  version: 2
+  default:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only: master
+
 
 
 # version: 2.1
