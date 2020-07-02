@@ -216,7 +216,8 @@ workflows:
           filters:
             branches:
               only: master
-          type: approval     
+          type: approval  
+      - run: echo "hello world 1" # ru          
 
 
 
