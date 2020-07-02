@@ -216,6 +216,7 @@ workflows:
           filters:
             branches:
               only: master
+          type: approval     
 
 
 
