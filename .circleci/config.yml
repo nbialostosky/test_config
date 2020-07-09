@@ -4,7 +4,7 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: circleci/golang:1.13.11
+      - image: circleci/golang:1.9.6
     steps:
       - run: echo "hello world 1"
       - run: go get -v github.com/bep/s3deploy
