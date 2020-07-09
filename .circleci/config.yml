@@ -3,10 +3,11 @@
 version: 2.1
 jobs:
   build:
-    machine:
-      image: ubuntu-1604:201903-01
+    docker:
+      - image: circleci/golang:1.13.11
     steps:
-      - run: echo "hello world 1" # ru
+      - run: echo "hello world 1"
+      - run: go get -v github.com/bep/s3deploy
 workflows:
   version: 2
   default:
