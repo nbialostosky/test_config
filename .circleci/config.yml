@@ -8,6 +8,7 @@ jobs:
     steps:
       - run: echo "hello world 1"
       - run: go get -v github.com/bep/s3deploy
+      - run : echo `git log --pretty=format:'%Cred%h%Creset - %s %C(bold blue)[%an]%Creset'`
 workflows:
   version: 2
   default:
