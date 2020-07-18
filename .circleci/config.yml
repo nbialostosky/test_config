@@ -8,9 +8,9 @@ jobs:
     steps:
       - run: echo "hello world 1"
 #       - run: go get -v github.com/bep/s3deploy
-      - run: echo `git log --pretty=format:'%Cred%h%Creset - %s %C(bold blue)[%an]%Creset'`
-      - run: echo 'export MESSAGE=git log --pretty=format:'%Cred%h%Creset - %s %C[%an]%Creset' >> $BASH_ENV
-      - run : echo $MESSAGE
+#       - run: echo `git log --pretty=format:'%Cred%h%Creset - %s %C(bold blue)[%an]%Creset'`
+#       - run: echo 'export MESSAGE=git log --pretty=format:'%Cred%h%Creset - %s %C[%an]%Creset' >> $BASH_ENV
+      - run : echo "hiiii"
       - run : sleep 500      
 workflows:
   version: 2
