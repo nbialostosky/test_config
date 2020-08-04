@@ -29,7 +29,11 @@ workflows:
     jobs:
       - build
       - test1
-      - test2
+      - test2:
+          requires:
+            - test1
+            or:
+            - test2
       
 
            
