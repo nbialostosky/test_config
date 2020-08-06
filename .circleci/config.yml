@@ -14,18 +14,18 @@ jobs:
       - run: echo "Hello, world!" > workspace/echo-output
       
       # Persist the specified paths (workspace/echo-output) into the workspace for use in downstream job. 
-      - persist_to_workspace:
-          # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is 
-          # taken to be the root directory of the workspace.
-#           root: workspace
-#           # Must be relative path from root
+#       - persist_to_workspace:
+#           # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is 
+#           # taken to be the root directory of the workspace.
+# #           root: workspace
+# #           # Must be relative path from root
+# #           paths:
+# #             - echo-output
+#           root: /home/circleci/
 #           paths:
-#             - echo-output
-          root: /home/circleci/
-          paths:
-            - oppia/node_modules/
-            - oppia/third_party/
-            - oppia_tools/
+#             - oppia/node_modules/
+#             - oppia/third_party/
+#             - oppia_tools/
 
   downstream:
     executor: my-executor
