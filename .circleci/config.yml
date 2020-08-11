@@ -49,8 +49,10 @@ workflows:
     jobs:
       - flow
       - downstream:
-          requires:
-            - flow
+          filters: 
+            branches:
+              only:
+                - test\/test\/.*/i
    
 
 
