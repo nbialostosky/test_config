@@ -73,12 +73,16 @@
        - run: 
            name: "echo environment variables from org-global context"
            command: echo "hello world job 1 "
+       - run: 
+           name: "Setup custom environment variables"
+           command: echo 'export MY_ENV_VAR="FOO"' >> $BASH_ENV     
            
    second_job:
      docker:
        - image: cimg/base:2020.01
      steps:
        - run: echo "hello world"
+       - run: echo $MY_ENV_VAR
            
         
 
