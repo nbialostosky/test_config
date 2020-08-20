@@ -60,7 +60,9 @@
    my-workflow:
      jobs:
        - run-tests
-       - second_job
+       - second_job:
+            requires:
+                  - run-tests
 
 
       
@@ -82,7 +84,7 @@
        - image: cimg/base:2020.01
      steps:
        - run: echo "hello world"
-       - run: echo $MY_ENV_VAR
+       - run: echo ${MY_ENV_VAR}
            
         
 
