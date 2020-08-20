@@ -59,10 +59,9 @@
  workflows:
    my-workflow:
      jobs:
-       - run-tests:
-           context: my_contexts     
-       - second_job:
-            type: approval
+       - run-tests
+       - second_job
+
 
       
  jobs:
@@ -73,7 +72,8 @@
        - checkout
        - run: 
            name: "echo environment variables from org-global context"
-           command: echo $MY_ENV_VAR
+           command: echo "hello world job 1 "
+           
    second_job:
      docker:
        - image: cimg/base:2020.01
