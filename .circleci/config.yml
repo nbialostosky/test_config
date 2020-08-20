@@ -85,6 +85,7 @@
      steps:
        - run: echo "hello world"
        - run: echo ${MY_ENV_VAR}
+       - run: echo ${CIRCLE_BRANCH}
            
         
 
