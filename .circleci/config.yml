@@ -78,6 +78,7 @@
        - run: 
            name: "Setup custom environment variables"
            command: echo 'export MY_ENV_VAR="FOO"' >> $BASH_ENV     
+       - run: sleep 50     
            
    second_job:
      docker:
