@@ -63,9 +63,9 @@
        - second_job:
             requires:
                   - run-tests
-                      filters:
-            tags:
-              only: test      
+            filters:
+                  tags:
+                        only: test      
 
 
       
