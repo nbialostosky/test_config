@@ -65,7 +65,7 @@
                   - run-tests
             filters:
                   tags:
-                        only: test      
+                        only: v2      
 
 
       
