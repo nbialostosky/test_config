@@ -74,6 +74,7 @@
      docker:
       - image: circleci/ruby:2.5.5-stretch-node-browsers
      steps:
+       - run: sudo rm -rf /var/lib/apt/lists/*
        - run: 
            name: Sudo apt-get update
            command: sudo apt-get update               
