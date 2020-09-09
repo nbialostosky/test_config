@@ -119,7 +119,7 @@
      docker:
       - image: circleci/ruby:2.5.5-stretch-node-browsers
      steps:
-       - checkout
+#        - checkout
        - run: echo ${MY_ENV_VAR}
 #        - checkout
 #        - run: 
