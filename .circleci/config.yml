@@ -121,6 +121,8 @@
      steps:
 #        - checkout
        - run: echo ${MY_ENV_VAR}
+       - run: echo ${TEST_ENV_VAR}
+       
 #        - checkout
 #        - run: 
 #            name: "echo environment variables from org-global context"
