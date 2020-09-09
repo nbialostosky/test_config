@@ -103,16 +103,40 @@
    my-workflow:
      jobs:
        - run-tests
-#            context:
-#              - my_contexts
+       - second_job:
+            requires:
+                  - run-tests
+            filters:
+                  tags:
+                        only: v2      
 
+
+      
  jobs:
    run-tests:
      docker:
-       - image: circleci/node
+      - image: circleci/ruby:2.5.5-stretch-node-browsers
      steps:
-       - checkout
+       - run: sudo rm -rf /var/lib/apt/lists/*
        - run: 
-           name: "echo environment variables from org-global context"
-           command: echo $MY_ENV_VAR 
+           name: Sudo apt-get update
+           command: sudo apt-get update               
+#        - checkout
+#        - run: 
+#            name: "echo environment variables from org-global context"
+#            command: echo "hello world job 1 "
+#        - run: 
+#            name: "Setup custom environment variables"
+#            command: echo 'export MY_ENV_VAR="FOO"' >> $BASH_ENV     
+    
+           
+   second_job:
+     docker:
+       - image: cimg/base:2020.01
+     steps:
+       - run: echo "hello world"
+       - run: echo ${MY_ENV_VAR}
+       - run: echo ${CIRCLE_BRANCH}
+       - run: sleep 500
+           
 #test
