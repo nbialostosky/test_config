@@ -102,7 +102,9 @@
  workflows:
    my-workflow:
      jobs:
-       - run-tests
+       - run-tests:
+            contexts:
+                  - my-contexts
        - second_job:
             requires:
                   - run-tests
@@ -117,10 +119,8 @@
      docker:
       - image: circleci/ruby:2.5.5-stretch-node-browsers
      steps:
-       - run: sudo rm -rf /var/lib/apt/lists/*
-       - run: 
-           name: Sudo apt-get update
-           command: sudo apt-get update               
+       - checkout
+       - run: echo ${MY_ENV_VAR}
 #        - checkout
 #        - run: 
 #            name: "echo environment variables from org-global context"
