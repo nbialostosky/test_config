@@ -104,7 +104,7 @@
      jobs:
        - run-tests:
            context:
-             - my-contexts
+             - my_contexts
        - second_job:
             requires:
                   - run-tests
