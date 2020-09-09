@@ -103,8 +103,8 @@
    my-workflow:
      jobs:
        - run-tests:
-            contexts:
-                  - my-contexts
+           context:
+             - my-contexts
        - second_job:
             requires:
                   - run-tests
