@@ -102,9 +102,9 @@
  workflows:
    my-workflow:
      jobs:
-       - run-tests:
-           context:
-             - my_contexts
+       - run-tests
+#            context:
+#              - my_contexts
 
  jobs:
    run-tests:
