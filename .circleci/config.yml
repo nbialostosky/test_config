@@ -62,17 +62,20 @@
    my-workflow:
      jobs:
        - run-tests
-    
-  test-hourly:
-    triggers:
-    - schedule:
-        cron: "0 * * * 1-5"
-        filters:
-            branches:
-              only:
-                - hourly-test
+   test-hourly:
      jobs:
-       - second_job                       
+       - second_job       
+    
+#   test-hourly:
+#     triggers:
+#     - schedule:
+#         cron: "0 * * * 1-5"
+#         filters:
+#             branches:
+#               only:
+#                 - hourly-test
+#      jobs:
+#        - second_job                       
 
 
       
