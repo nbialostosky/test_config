@@ -62,7 +62,14 @@
    my-workflow:
      jobs:
        - run-tests
-   test-hourly:
+   nightly:
+    triggers:
+      - schedule:
+          cron: "0 * * * 1-5"
+          filters:
+            branches:
+              only:
+                - master       
      jobs:
        - second_job       
     
