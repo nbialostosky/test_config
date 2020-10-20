@@ -61,23 +61,18 @@
  workflows:
    my-workflow:
      jobs:
-       - run-tests:
-           context:
-             - my_contexts
-           filters:  # using regex filters requires the entire branch to match
-                 branches:
-                        only:  # only branches matching the below regex filters will run
-                              - master
+       - run-tests
     
   test-hourly:
     triggers:
     - schedule:
         cron: "0 * * * 1-5"
         filters:
-          branches:
-            only: hourly-test
-    jobs:
-    - second_job                  
+            branches:
+              only:
+                - hourly-test
+     jobs:
+       - second_job                       
 
 
       
@@ -87,8 +82,8 @@
       - image: circleci/ruby:2.5.5-stretch-node-browsers
      steps:
 #        - checkout
-       - run: echo ${MY_ENV_VAR}
-       - run: echo ${TEST_ENV_VAR}
+       - run: echo "hello world"
+
        
 #        - checkout
 #        - run: 
@@ -103,9 +98,7 @@
      docker:
        - image: cimg/base:2020.01
      steps:
-       - run: echo "hello world"
-       - run: echo ${MY_ENV_VAR}
-       - run: echo ${CIRCLE_BRANCH}
-       - run: sleep 500
+       - run: echo "bye world. This is a scheduled workflow/job"
+
            
 # #test
