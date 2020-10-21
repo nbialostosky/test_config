@@ -1,60 +1,4 @@
-# version: 2.1
 
-# executors:
-#   my-executor:
-#     docker:
-#       - image: circleci/openjdk:8-jdk
-
-
-# jobs:
-#   flow:
-#     executor: my-executor
-#     steps:
-#       - run: mkdir -p workspace
-#       - run: echo "Hello, world!" > workspace/echo-output
-#       - run: pwd 
-      
-#       # Persist the specified paths (workspace/echo-output) into the workspace for use in downstream job. 
-# #       - persist_to_workspace:
-# #           # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is 
-# #           # taken to be the root directory of the workspace.
-# # #           root: workspace
-# # #           # Must be relative path from root
-# # #           paths:
-# # #             - echo-output
-# #           root: /home/circleci/
-# #           paths:
-# #             - oppia/node_modules/
-# #             - oppia/third_party/
-# #             - oppia_tools/
-
-#   downstream:
-#     executor: my-executor
-#     steps:
-#       - attach_workspace:
-#           # Must be absolute path or relative path from working_directory
-#           at: /tmp/workspace
-
-#       - run: |
-#           if [[ `cat /tmp/workspace/echo-output` == "Hello, world!" ]]; then
-#             echo "It worked!";
-#           else
-#             echo "Nope!"; exit 1
-#           fi
-
-# workflows:
-#   version: 2
-
-#   btd:
-#     jobs:
-#       - flow
-#       - downstream:
-#           filters: 
-#             branches:
-#               only:
-#                 - test\/test\/.*/i
-   
-# 
         
  version: 2.1
 
@@ -73,16 +17,7 @@
     jobs:
       - second_job   
     
-#   test-hourly:
-#     triggers:
-#     - schedule:
-#         cron: "0 * * * 1-5"
-#         filters:
-#             branches:
-#               only:
-#                 - hourly-test
-#      jobs:
-#        - second_job                       
+                     
 
 
       
@@ -91,23 +26,12 @@
      docker:
       - image: circleci/ruby:2.5.5-stretch-node-browsers
      steps:
-#        - checkout
-       - run: echo "hello world"
 
+       - run: echo "hello world"
        
-#        - checkout
-#        - run: 
-#            name: "echo environment variables from org-global context"
-#            command: echo "hello world job 1 "
-#        - run: 
-#            name: "Setup custom environment variables"
-#            command: echo 'export MY_ENV_VAR="FOO"' >> $BASH_ENV     
-    
-           
    second_job:
      docker:
        - image: cimg/base:2020.01
      steps:
        - run: echo "bye world. This is a scheduled workflow/job"
-
-
+      #test
