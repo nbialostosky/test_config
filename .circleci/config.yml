@@ -1,4 +1,7 @@
-version: 2.1
+
+        
+ version: 2.1
+
  workflows:
    my-workflow:
      jobs:
@@ -13,7 +16,11 @@ version: 2.1
                 - hourly-test       
     jobs:
       - second_job   
-          
+    
+                     
+
+
+      
  jobs:
    run-tests:
      docker:
@@ -21,12 +28,9 @@ version: 2.1
      steps:
 
        - run: echo "hello world"
-        
+       
    second_job:
      docker:
        - image: cimg/base:2020.01
      steps:
        - run: echo "bye world. This is a scheduled workflow/job"
-
-
-
